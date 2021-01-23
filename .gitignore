@@ -1,0 +1,6 @@
+target
+.vscode
+*.data
+*.data.old
+*.svg
+heaptrack.*
