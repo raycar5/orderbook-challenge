@@ -21,7 +21,8 @@ async fn main() {
 
     // Spawn Bitstamp task.
     spawn(async move {
-        let stream = sources::bitstamp::get_stream(pair, || backoff::ExponentialBackoff::default());
+        let stream =
+            sources::bitstamp::BitstampStream::new(pair, || backoff::ExponentialBackoff::default());
         tokio::pin!(stream);
         while let Some(item) = stream.next().await {
             tx_c.send(item).await.unwrap();
@@ -32,7 +33,7 @@ async fn main() {
     spawn(async move {
         let tx = tx.clone();
         let stream =
-            sources::binance::get_stream(pair_c, || backoff::ExponentialBackoff::default());
+            sources::binance::BinanceStream::new(pair_c, || backoff::ExponentialBackoff::default());
         tokio::pin!(stream);
         while let Some(item) = stream.next().await {
             tx.send(item).await.unwrap();

@@ -4,21 +4,18 @@ use crate::{
     TOP_LEVELS,
 };
 use arrayvec::ArrayVec;
-use async_stream::stream;
 use std::cmp::Ordering;
 use std::convert::TryInto;
 use tokio::sync::mpsc::Receiver;
-use tokio_stream::Stream;
+use tokio_stream::{wrappers::ReceiverStream, Stream, StreamExt};
 
 /// Returns a stream of [orderbook::Summary] which emits whenever a new [InputUpdate] is received through `inputs`.
-pub fn merge(mut inputs: Receiver<InputUpdate>) -> impl Stream<Item = orderbook::Summary> {
+pub fn merge(inputs: Receiver<InputUpdate>) -> impl Stream<Item = orderbook::Summary> {
     let mut state = MergeState::new();
-    stream! {
-        while let Some(input) = inputs.recv().await{
-            state.update(input);
-            yield state.summary();
-        }
-    }
+    ReceiverStream::new(inputs).map(move |input| {
+        state.update(input);
+        state.summary()
+    })
 }
 
 #[derive(Debug)]
@@ -216,8 +213,7 @@ mod test {
     #[quickcheck]
     fn test_stays_sorted(inputs: Vec<InputUpdate>) {
         let mut state = MergeState::new();
-        // Nothin sus happenin here.
-        println!("state:{:?}", state);
+
         for update in inputs {
             state.update(update);
             let orderbook::Summary { asks, bids, spread } = state.summary();
@@ -243,5 +239,4 @@ mod test {
             assert!(is_sorted(&bids, Level::cmp_bid), "bids: {:?}", bids);
         }
     }
-    use better_macro::println;
 }

@@ -9,7 +9,6 @@ debug = true
 
 [dependencies]
 arrayvec = "0.5"
-async-stream = "0.3"
 backoff = {git = "https://github.com/ihrwein/backoff.git", rev = "df003285a113e", features = ["tokio"]}
 binary-heap-plus = "0.4"
 fast-float = "0.2"
@@ -28,7 +27,6 @@ url = "2.2"
 variant_count = "1.0"
 
 [dev-dependencies]
-better-macro = "1.0.4"
 quickcheck = "1.0"
 quickcheck_macros = "1.0"
 

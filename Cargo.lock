@@ -85,16 +85,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "904dfeac50f3cdaba28fc6f57fdcddb75f49ed61346676a78c4ffe55877802fd"
 
 [[package]]
-name = "better-macro"
-version = "1.0.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1538ae5b75d80ebf4a3ec50d440ba3ebd64f7f846066ef01ffd8a93d6c22c177"
-dependencies = [
- "proc-macro2 1.0.24",
- "quote 1.0.7",
-]
-
-[[package]]
 name = "binary-heap-plus"
 version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -716,9 +706,7 @@ name = "orderbook-challenge"
 version = "0.1.0"
 dependencies = [
  "arrayvec",
- "async-stream",
  "backoff",
- "better-macro",
  "binary-heap-plus",
  "fast-float",
  "futures-util",
